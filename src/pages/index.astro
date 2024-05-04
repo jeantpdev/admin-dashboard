@@ -1,13 +1,9 @@
 ---
 import Layout from '@/layouts/Layout.astro';
-import FilaTabla from '@/components/componentes-index/FilaTabla.jsx'
-import Tabla from '@/components/componentes-index/Tabla.jsx'
+import PaginaPrincipal from '@/components/componentes-index/PaginaPrincipal.jsx'
 
 ---
 
 <Layout title="Welcome to Astro.">
-	<h1 class="text-3xl font-extrabold text-zinc-800">Productos</h1>
-	<div class = "flex flex-col mt-12">
-		<Tabla client:load/>
-	</div>
+	<PaginaPrincipal client:load/>
 </Layout>

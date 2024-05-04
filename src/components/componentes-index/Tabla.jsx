@@ -54,6 +54,7 @@ export default function tabla(props) {
                   categoria={producto.categoria}
                   nombre_producto={producto.nombre_producto}
                   precio={producto.precio}
+                  descripcion={producto.descripcion}
                   _id={producto._id}
                 />
               ))}
