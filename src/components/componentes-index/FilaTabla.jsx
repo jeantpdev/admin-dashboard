@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { convertirAMoneda } from '@/utils/Funct.jsx';
-import axios from 'axios';
-import Modal from './Modal';
 import EditarProducto from './EditarProducto.jsx';
 
 export default function FilaTabla(props) {
