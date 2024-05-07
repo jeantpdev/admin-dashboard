@@ -40,3 +40,15 @@ export const calcularPrecioXCantidad = (precio, cantidad) => {
     let total = 0;
     return convertirAMoneda(total = (precio * cantidad));
 }
+
+export const generarNumeroAleatorio = () => {
+    // Genera un número aleatorio entre 0 y 99999
+    var numeroAleatorio = Math.floor(Math.random() * 100000);
+    
+    // Asegura que el número tenga 5 dígitos
+    var numeroDe5Digitos = ('00000' + numeroAleatorio).slice(-5);
+    
+    return numeroDe5Digitos;
+  }
+
+  
