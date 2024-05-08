@@ -32,7 +32,7 @@ const SubirImagenes = () => {
   return (
     <div className='w-full'>
       <label htmlFor="imagenes" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Seleccionar imágenes</label>
-      <input type="file" id="imagenes" multiple onChange={handleFileChange} />
+      <input type="file" id="imagenes" onChange={handleFileChange} />
       <button onClick={enviarImagenesAlServidor}>Enviar Imágenes</button>
     </div>
   );
