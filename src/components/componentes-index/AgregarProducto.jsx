@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { generarNumeroAleatorio } from '@/utils/Funct';
 import SubirImagenes from '@/components/componentes-index/SubirImagenes.jsx'
@@ -24,14 +24,65 @@ export default function AgregarProducto({ onClose }) {
     const manejoImagenPrincipal = (event) => {
         const files = event.target.files;
         const filesArray = Array.from(files);
-        setImagenPrincipalSeleccionada(filesArray);
+        setImagenPrincipalSeleccionada(filesArray)
     };
 
-    const manejoImagenesSecundarias= (event) => {
+    useEffect(() => {
+        if(imagenPrincipalSeleccionada.length != 0){
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setImagenPrincipal(reader.result);
+            };
+            reader.readAsDataURL(imagenPrincipalSeleccionada[0]);
+        }
+
+    }, [imagenPrincipalSeleccionada]);
+
+    const manejoImagenesSecundarias = (event) => {
         const files = event.target.files;
         const filesArray = Array.from(files);
         setImagenesSecundariasSeleccionada(filesArray);
     };
+
+    /*
+    const handleDeleteImagenSecundaria = (imagen, index) => {
+        console.log(imagenesSecundariasSeleccionada);
+    
+        // Filtrar las imágenes seleccionadas para excluir la imagen con el nombre dado
+        const nuevasImagenesSeleccionadas = imagenesSecundariasSeleccionada.filter(
+            img => img.name !== imagen.name
+        );
+        setImagenesSecundariasSeleccionada(nuevasImagenesSeleccionadas);
+    
+        // Eliminar la imagen del estado de imágenes secundarias si está presente
+        const nuevasImagenes = [...imagenesSecundaria];
+        nuevasImagenes.splice(index, 1);
+        setImagenesSecundaria(nuevasImagenes);
+    };
+    */
+
+    useEffect(() => {
+        if (imagenesSecundariasSeleccionada.length !== 0) {
+            const promises = imagenesSecundariasSeleccionada.map(file => {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                        resolve(reader.result);
+                    };
+                    reader.onerror = reject;
+                    reader.readAsDataURL(file);
+                });
+            });
+
+            Promise.all(promises)
+                .then(results => {
+                    setImagenesSecundaria(results);
+                })
+                .catch(error => {
+                    console.error("Error al cargar imágenes:", error);
+                });
+        }
+    }, [imagenesSecundariasSeleccionada]);
 
 const handleAgregarNuevoProducto = async (event) => {
     event.preventDefault();
@@ -117,9 +168,28 @@ const handleAgregarNuevoProducto = async (event) => {
                     </div>
 
                     {/* IMAGENES */}
-                    <div className='w-full space-y-2'>
-                        <label htmlFor="imagenes" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Seleccionar imágenes</label>
-                        <input type="file" onChange={manejoImagenPrincipal} /> {/* ACA SE GUARDAN LA IMAGEN EN selectedFile */}
+                    <div className='w-full space-y-5'>
+                        <div className="space-y-5">
+                                <label htmlFor="imagenes" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Seleccionar imagen principal</label>
+                                <img src= {imagenPrincipal == "" ? "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png" : `${imagenPrincipal}` } className='w-20 h-18 object-cover' alt="" />
+                                <input type="file" onChange={manejoImagenPrincipal} /> {/* ACA SE GUARDAN LA IMAGEN EN selectedFile */}
+                            </div>
+
+                        <div className='flex gap-2 flex-wrap'> 
+
+                            { imagenesSecundaria != 0 ?
+                            imagenesSecundaria.map((imagen, index) => (
+                                <div key={index} className="relative">
+                                    <img src={imagen} className='w-20 h-18 object-cover' alt="" />
+                                </div>
+                            )): 
+                            <div className="relative">
+                                <label htmlFor="imagenes" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Seleccionar imagen secundaria</label>
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png" className='w-20 h-18' alt="" />
+                            </div>
+                            }
+                        </div>
+
                         <input type="file" multiple onChange={manejoImagenesSecundarias} /> {/* ACA SE GUARDAN LA IMAGEN EN selectedFile */}
                        {/* <button onClick={enviarImagenesAlServidor}>Enviar Imágenes</button> */} 
                     </div>
