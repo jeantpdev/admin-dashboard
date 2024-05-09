@@ -7,14 +7,20 @@ export default function tabla(props) {
     const [data, setData] = useState(null);
 
     useEffect(() => {
+      const access_token = localStorage.getItem('access_token')
       const fetchData = async () => {
         try {
           // Realiza la solicitud HTTP a la API
-          const response = await axios.get('https://mongodb-productos.onrender.com/productos/');
-          // Establece los datos en el estado
+          const response = await axios.get('http://127.0.0.1:5900/productos/', { 
+            headers: {
+              'Authorization' : 'Bearer ' + access_token
+            }
+          });
+          console.log(response)
           setData(response.data.productos);
+
         } catch (error) {
-          // Maneja cualquier error que pueda ocurrir
+
           console.error('Error al obtener los datos:', error);
         }
       };

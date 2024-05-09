@@ -6,7 +6,6 @@ export default function PaginaPrincipal() {
 
   useEffect(() => {
     const accessToken = localStorage.getItem('access_token');
-
     if (!accessToken) {
       window.location.assign("/login")
     }

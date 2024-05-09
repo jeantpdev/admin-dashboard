@@ -8,8 +8,13 @@ const EditarImagen = (props) => {
     const [selectedFiles, setSelectedFiles] = useState([]);
 
     const enviarEliminarImagen = async (datosImagen) => {
+        const access_token = localStorage.getItem('access_token')
         try {
-            const response = await axios.post('https://mongodb-productos.onrender.com/eliminar-imagen/', datosImagen);
+            const response = await axios.post('http://127.0.0.1:5900/eliminar-imagen/', datosImagen, {
+                headers: {
+                    'Authorization' : 'Bearer ' + access_token
+                  },
+            });
             return response.data['status_imagen_eliminada'];
         } catch (error) {
             console.error('Error al enviar las imágenes:', error);
@@ -38,6 +43,7 @@ const EditarImagen = (props) => {
     }
 
     const handleDeleteImagenSecundaria = async (imagen, index) => {
+        const access_token = localStorage.getItem('access_token')
         const datosImagen = {
             id: props.id,
             imagen_url: imagen,
@@ -49,7 +55,12 @@ const EditarImagen = (props) => {
             const res = await enviarEliminarImagen(datosImagen);
             if (res === "correcto") {
 
-                const response = await axios.get('https://mongodb-productos.onrender.com/productos/');
+                const response = await axios.get('http://127.0.0.1:5900/productos/', {
+                    headers: {
+                        'Authorization' : 'Bearer ' + access_token,
+                        'Content-Type': 'multipart/form-data',
+                      },
+                });
                 
                 const producto = response.data.productos.find(producto => producto._id === datosImagen.id);
     
@@ -72,6 +83,8 @@ const EditarImagen = (props) => {
     };
 
     const enviarImagenesAlServidor = async (tipo_imagen) => {
+        const access_token = localStorage.getItem('access_token')
+
         if (selectedFiles.length === 0){
             console.log("Tienes que seleccionar imagenes")
         }else{
@@ -84,9 +97,10 @@ const EditarImagen = (props) => {
             formData.append("tipo_imagen", tipo_imagen)
           
             try {
-              const response = await axios.post('https://mongodb-productos.onrender.com/guardar-imagen/', formData, {
+              const response = await axios.post('http://127.0.0.1:5900/guardar-imagen/', formData, {
                 headers: {
-                  'Content-Type': 'multipart/form-data',
+                    'Authorization' : 'Bearer ' + access_token,
+                    'Content-Type': 'multipart/form-data'
                 },
               });
               if (response.status == 200){

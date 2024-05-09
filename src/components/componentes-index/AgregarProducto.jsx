@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { generarNumeroAleatorio } from '@/utils/Funct';
-import SubirImagenes from '@/components/componentes-index/SubirImagenes.jsx'
 
 export default function AgregarProducto({ onClose }) {
     const [nuevoProducto, setNuevoProducto] = useState({
@@ -44,23 +43,6 @@ export default function AgregarProducto({ onClose }) {
         setImagenesSecundariasSeleccionada(filesArray);
     };
 
-    /*
-    const handleDeleteImagenSecundaria = (imagen, index) => {
-        console.log(imagenesSecundariasSeleccionada);
-    
-        // Filtrar las imágenes seleccionadas para excluir la imagen con el nombre dado
-        const nuevasImagenesSeleccionadas = imagenesSecundariasSeleccionada.filter(
-            img => img.name !== imagen.name
-        );
-        setImagenesSecundariasSeleccionada(nuevasImagenesSeleccionadas);
-    
-        // Eliminar la imagen del estado de imágenes secundarias si está presente
-        const nuevasImagenes = [...imagenesSecundaria];
-        nuevasImagenes.splice(index, 1);
-        setImagenesSecundaria(nuevasImagenes);
-    };
-    */
-
     useEffect(() => {
         if (imagenesSecundariasSeleccionada.length !== 0) {
             const promises = imagenesSecundariasSeleccionada.map(file => {
@@ -87,7 +69,6 @@ export default function AgregarProducto({ onClose }) {
 const handleAgregarNuevoProducto = async (event) => {
     event.preventDefault();
 
-    // Preparar imagen para enviar al servidor
     const formData = new FormData();
     imagenPrincipalSeleccionada.forEach((file) => {
         formData.append('imagen_principal', file);
@@ -106,7 +87,7 @@ const handleAgregarNuevoProducto = async (event) => {
             nombre_producto: nuevoProducto.nombre,
             categoria: nuevoProducto.categoria,
             precio: nuevoProducto.precio,
-            descuento: nuevoProducto.precio || 0,
+            descuento: nuevoProducto.descuento || 0,
             descripcion: nuevoProducto.descripcion || "no dado",
             imagen_principal: url_imagen_principal, // Actualizar aquí con el valor recién asignado
             imagenes_productos: urls_imagenes_secundarias, // Actualizar aquí con el valor recién asignado
@@ -130,13 +111,13 @@ const handleAgregarNuevoProducto = async (event) => {
     }
 };
 
-
-
     const enviarImagenes = async(formData) =>{
+        const access_token = localStorage.getItem('access_token')
         try {
-            const response = await axios.post('https://mongodb-productos.onrender.com/crear-imagen/', formData, {
+            const response = await axios.post('http://127.0.0.1:5900/crear-imagen/', formData, {
                 headers: {
-                    'Content-Type': 'multipart/form-data',
+                    'Authorization' : 'Bearer ' + access_token,
+                    'Content-Type': 'multipart/form-data'
                 },
             });
             console.log('Imágenes enviadas exitosamente');
@@ -147,9 +128,12 @@ const handleAgregarNuevoProducto = async (event) => {
     }
 
     const enviarDatosProductos = async(datosProducto) =>{
-
+        const access_token = localStorage.getItem('access_token')
         try {
-            const response = await axios.post('https://mongodb-productos.onrender.com/insertar-producto/', datosProducto, {
+            const response = await axios.post('http://127.0.0.1:5900/insertar-producto/', datosProducto, {
+                headers: {
+                    'Authorization' : 'Bearer ' + access_token
+                },
             });
             console.log('Producto enviado exitosamente');
             return response
