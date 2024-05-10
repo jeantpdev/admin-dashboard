@@ -33,7 +33,7 @@ export default function EditarProducto({ producto, onClose }) {
 
         try {
 
-            const response = await axios.put('http://127.0.0.1:5900/editar-producto/', datosActualizados, {
+            const response = await axios.put('https://mongodb-productos.onrender.com/editar-producto/', datosActualizados, {
                 headers: {
                     'Authorization': 'Bearer ' + access_token,
                 },

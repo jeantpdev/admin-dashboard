@@ -11,7 +11,7 @@ export default function tabla(props) {
       const fetchData = async () => {
         try {
           // Realiza la solicitud HTTP a la API
-          const response = await axios.get('http://127.0.0.1:5900/productos/', { 
+          const response = await axios.get('https://mongodb-productos.onrender.com/productos/', { 
             headers: {
               'Authorization' : 'Bearer ' + access_token
             }

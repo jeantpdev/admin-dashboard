@@ -18,7 +18,7 @@ const SubirImagenes = () => {
     });
   
     try {
-      const response = await axios.post('http://127.0.0.1:5900/guardar-imagen/', formData, {
+      const response = await axios.post('https://mongodb-productos.onrender.com/guardar-imagen/', formData, {
         headers: {
           'Authorization' : 'Bearer ' + access_token,
           'Content-Type': 'multipart/form-data',

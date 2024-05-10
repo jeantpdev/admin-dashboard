@@ -10,7 +10,7 @@ const EditarImagen = (props) => {
     const enviarEliminarImagen = async (datosImagen) => {
         const access_token = localStorage.getItem('access_token')
         try {
-            const response = await axios.post('http://127.0.0.1:5900/eliminar-imagen/', datosImagen, {
+            const response = await axios.post('https://mongodb-productos.onrender.com/eliminar-imagen/', datosImagen, {
                 headers: {
                     'Authorization' : 'Bearer ' + access_token
                   },
@@ -55,7 +55,7 @@ const EditarImagen = (props) => {
             const res = await enviarEliminarImagen(datosImagen);
             if (res === "correcto") {
 
-                const response = await axios.get('http://127.0.0.1:5900/productos/', {
+                const response = await axios.get('https://mongodb-productos.onrender.com/productos/', {
                     headers: {
                         'Authorization' : 'Bearer ' + access_token,
                         'Content-Type': 'multipart/form-data',
@@ -97,7 +97,7 @@ const EditarImagen = (props) => {
             formData.append("tipo_imagen", tipo_imagen)
           
             try {
-              const response = await axios.post('http://127.0.0.1:5900/guardar-imagen/', formData, {
+              const response = await axios.post('https://mongodb-productos.onrender.com/guardar-imagen/', formData, {
                 headers: {
                     'Authorization' : 'Bearer ' + access_token,
                     'Content-Type': 'multipart/form-data'
