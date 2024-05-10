@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import EditarImagen from './EditarImagenes';
+import { editarProducto } from '@/utils/api.js';
+
 export default function EditarProducto({ producto, onClose }) {
 
     const [id, setId] = useState(producto._id);
@@ -9,13 +10,15 @@ export default function EditarProducto({ producto, onClose }) {
     const [precioEditado, setPrecioEditado] = useState(producto.precio);
     const [descripcionEditada, setDescripcionEditada] = useState(producto.descripcion);
     const [descuentoEditado, setDescuentoEditada] = useState(producto.descuento);
-    const [imagenPrincipalEditada, setImagenesPrincipalEditada] = useState(producto.imagen_principal);
-    const [imagenesProductosEditada, setImagenesProductosEditada] = useState(producto.imagenes_productos);
     const [dimensionesEditada, setDimensionesEditada] = useState(producto.dimensiones);
     const [materialEditada, setMaterialEditado] = useState(producto.material);
 
+    // Se envian al componente EditarImagenes.jsx
+    const [imagenPrincipalEditada, setImagenesPrincipalEditada] = useState(producto.imagen_principal);
+    const [imagenesProductosEditada, setImagenesProductosEditada] = useState(producto.imagenes_productos);
+
+    // Solamente envia los datos del producto 
     const handleGuardarCambios = async (event) => {
-        const access_token = localStorage.getItem('access_token')
         event.preventDefault();
 
         const datosActualizados = {
@@ -32,18 +35,11 @@ export default function EditarProducto({ producto, onClose }) {
         };
 
         try {
-
-            const response = await axios.put('https://mongodb-productos.onrender.com/editar-producto/', datosActualizados, {
-                headers: {
-                    'Authorization': 'Bearer ' + access_token,
-                },
-            });
-            console.log(response)
-            console.log("Producto editado")
+            const response = await editarProducto(datosActualizados);
+            console.log('Producto editado:', response);
         } catch (error) {
-            console.error('Error al editar el producto:', error);
-
-        };
+            console.error('Error al editar el producto:', error.message);
+        }
     }
 
     const handleCloseMenu = () => {

@@ -2,7 +2,13 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { generarNumeroAleatorio } from '@/utils/Funct';
 
-export default function AgregarProducto({ onClose }) {
+export default function AgregarProducto(props) {
+
+    const handleCloseMenu = () =>{
+        props.onClose()
+        props.actualizar_tabla()
+    }
+
     const [nuevoProducto, setNuevoProducto] = useState({
         nombre: '',
         categoria: '',
@@ -109,7 +115,7 @@ const handleAgregarNuevoProducto = async (event) => {
     const enviarImagenes = async(formData) =>{
         const access_token = localStorage.getItem('access_token')
         try {
-            const response = await axios.post('https://mongodb-productos.onrender.com/crear-imagen/', formData, {
+            const response = await axios.post('http://127.0.0.1:5900/crear-imagen/', formData, {
                 headers: {
                     'Authorization' : 'Bearer ' + access_token,
                     'Content-Type': 'multipart/form-data'
@@ -125,7 +131,7 @@ const handleAgregarNuevoProducto = async (event) => {
     const enviarDatosProductos = async(datosProducto) =>{
         const access_token = localStorage.getItem('access_token')
         try {
-            const response = await axios.post('https://mongodb-productos.onrender.com/insertar-producto/', datosProducto, {
+            const response = await axios.post('http://127.0.0.1:5900/insertar-producto/', datosProducto, {
                 headers: {
                     'Authorization' : 'Bearer ' + access_token
                 },
@@ -143,7 +149,7 @@ const handleAgregarNuevoProducto = async (event) => {
                 <div className="py-2 px-4 mx-auto max-w-2xl">
                     <div className="flex justify-between items-center mb-4">
                         <h2 className="text-sm lg:text-xl font-bold text-gray-900 dark:text-white">Agregar producto</h2>
-                        <button onClick={onClose}>X</button>
+                        <button onClick={handleCloseMenu}>X</button>
                     </div>
 
                     {/* IMAGENES */}

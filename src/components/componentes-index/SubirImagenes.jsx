@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { guardarImagen } from '@/utils/api.js';
 import axios from 'axios';
 
 const SubirImagenes = () => {
@@ -11,21 +12,14 @@ const SubirImagenes = () => {
   };
 
   const enviarImagenesAlServidor = async () => {
-    const access_token = localStorage.getItem('access_token')
     const formData = new FormData();
     selectedFiles.forEach((file) => {
-      formData.append('imagenes', file); // Usa 'imagenes' como nombre del campo
+      formData.append('imagenes', file); //Se guarda en la clave 'imagenes' y su valor las imagenes
     });
   
     try {
-      const response = await axios.post('https://mongodb-productos.onrender.com/guardar-imagen/', formData, {
-        headers: {
-          'Authorization' : 'Bearer ' + access_token,
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      console.log('Respuesta del servidor:', response);
-      console.log('Imágenes enviadas exitosamente');
+      const response = await guardarImagen(formData)
+      console.log('Producto eliminado:', response);
     } catch (error) {
       console.error('Error al enviar las imágenes:', error);
     }
