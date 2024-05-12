@@ -115,7 +115,7 @@ const handleAgregarNuevoProducto = async (event) => {
     const enviarImagenes = async(formData) =>{
         const access_token = localStorage.getItem('access_token')
         try {
-            const response = await axios.post('http://127.0.0.1:5900/crear-imagen/', formData, {
+            const response = await axios.post('https://mongodb-productos.onrender.com/crear-imagen/', formData, {
                 headers: {
                     'Authorization' : 'Bearer ' + access_token,
                     'Content-Type': 'multipart/form-data'
@@ -131,7 +131,7 @@ const handleAgregarNuevoProducto = async (event) => {
     const enviarDatosProductos = async(datosProducto) =>{
         const access_token = localStorage.getItem('access_token')
         try {
-            const response = await axios.post('http://127.0.0.1:5900/insertar-producto/', datosProducto, {
+            const response = await axios.post('https://mongodb-productos.onrender.com/insertar-producto/', datosProducto, {
                 headers: {
                     'Authorization' : 'Bearer ' + access_token
                 },
