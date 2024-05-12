@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import EditarProducto from './EditarProducto.jsx';
+import EditarProducto from '@/components/componentes-productos/EditarProducto.jsx'
 import { convertirAMoneda } from '@/utils/Funct.jsx';
 import { eliminarProducto } from '@/utils/api.js';
 

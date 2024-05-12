@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import EditarImagen from './EditarImagenes';
+import EditarImagen from '@/components/componentes-productos/componente-imagenes/EditarImagenes'
 import { editarProducto } from '@/utils/api.js';
 
 export default function EditarProducto({ producto, onClose }) {
