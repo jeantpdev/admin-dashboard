@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import FilaTabla from '@/components/componente-tabla/FilaTabla'
 import FilaProductos from '@/components/componente-tabla/Filas/Productos'
 import FilaPedidos from '@/components/componente-tabla/Filas/Pedidos'
-
 import Pedidos from './Filas/Pedidos'
 
 export default function Tabla(props) {
@@ -24,7 +23,7 @@ export default function Tabla(props) {
                     <FilaProductos
                         key={datos._id}
                         {...datos}
-                        actualizar_tabla={props.actualizar_tabla}
+                        actualizar_tabla={props.actualizar_tabla} // fetchData como parametro para poder actualizar la tabla
                     />
                 )):null
                 }
@@ -33,7 +32,7 @@ export default function Tabla(props) {
                         <FilaPedidos
                             key={datos._id}
                             {...datos}
-                            actualizar_tabla={props.actualizar_tabla}
+                            actualizar_tabla={props.actualizar_tabla} // fetchData como parametro para poder actualizar la tabla
                         />
                     )):null
                 }

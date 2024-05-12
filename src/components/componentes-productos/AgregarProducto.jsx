@@ -4,6 +4,8 @@ import { generarNumeroAleatorio } from '@/utils/Funct';
 
 export default function AgregarProducto(props) {
 
+    console.log(props)
+
     const handleCloseMenu = () =>{
         props.onClose()
         props.actualizar_tabla()
@@ -115,7 +117,7 @@ const handleAgregarNuevoProducto = async (event) => {
     const enviarImagenes = async(formData) =>{
         const access_token = localStorage.getItem('access_token')
         try {
-            const response = await axios.post('https://mongodb-productos.onrender.com/crear-imagen/', formData, {
+            const response = await axios.post('http://127.0.0.1:5900/crear-imagen/', formData, {
                 headers: {
                     'Authorization' : 'Bearer ' + access_token,
                     'Content-Type': 'multipart/form-data'
@@ -131,7 +133,7 @@ const handleAgregarNuevoProducto = async (event) => {
     const enviarDatosProductos = async(datosProducto) =>{
         const access_token = localStorage.getItem('access_token')
         try {
-            const response = await axios.post('https://mongodb-productos.onrender.com/insertar-producto/', datosProducto, {
+            const response = await axios.post('http://127.0.0.1:5900/insertar-producto/', datosProducto, {
                 headers: {
                     'Authorization' : 'Bearer ' + access_token
                 },
@@ -145,8 +147,8 @@ const handleAgregarNuevoProducto = async (event) => {
 
     return (
         <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center">
-            <div className="bg-white p-4 rounded-lg h-5/6 overflow-auto mx-auto">
-                <div className="py-2 px-4 mx-auto max-w-2xl">
+            <div className="bg-white p-4 rounded-lg w-11/12 sm:w-10/12 lg:w-5/12 h-5/6 overflow-auto">
+                <div className="py-2 px-4">
                     <div className="flex justify-between items-center mb-4">
                         <h2 className="text-sm lg:text-xl font-bold text-gray-900 dark:text-white">Agregar producto</h2>
                         <button onClick={handleCloseMenu}>X</button>
@@ -184,27 +186,27 @@ const handleAgregarNuevoProducto = async (event) => {
                         <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
                             <div className="sm:col-span-2">
                                 <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre producto</label>
-                                <input type="text" name="name" id="name" onChange={(e) => setNuevoProducto({ ...nuevoProducto, nombre: e.target.value })} value={nuevoProducto.nombre} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg " placeholder="nombre del producto" required="" />
+                                <input type="text" name="name" id="name" onChange={(e) => setNuevoProducto({ ...nuevoProducto, nombre: e.target.value })} value={nuevoProducto.nombre} className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg" placeholder="nombre del producto" required="" />
                             </div>
                             <div className="w-full">
                                 <label htmlFor="brand" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Categoria</label>
-                                <input type="text" name="brand" id="brand" onChange={(e) => setNuevoProducto({ ...nuevoProducto, categoria: e.target.value })} value={nuevoProducto.categoria} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg " placeholder="categoria" required="" />
+                                <input type="text" name="brand" id="brand" onChange={(e) => setNuevoProducto({ ...nuevoProducto, categoria: e.target.value })} value={nuevoProducto.categoria} className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg" placeholder="categoria" required="" />
                             </div>
                             <div className="w-full">
                                 <label htmlFor="price" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Precio</label>
-                                <input type="number" name="price" id="price" onChange={(e) => setNuevoProducto({ ...nuevoProducto, precio: e.target.value })} value={nuevoProducto.precio} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg " placeholder="precio" required="" />
+                                <input type="number" name="price" id="price" onChange={(e) => setNuevoProducto({ ...nuevoProducto, precio: e.target.value })} value={nuevoProducto.precio} className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg" placeholder="precio" required="" />
                             </div>
                             <div className="w-full">
                                 <label htmlFor="descuento" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Descuento</label>
-                                <input type="number" name="descuento" id="descuento" onChange={(e) => setNuevoProducto({ ...nuevoProducto, descuento: e.target.value })} value={nuevoProducto.descuento} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg " placeholder="descuento" required="" />
+                                <input type="number" name="descuento" id="descuento" onChange={(e) => setNuevoProducto({ ...nuevoProducto, descuento: e.target.value })} value={nuevoProducto.descuento} className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg" placeholder="descuento" required="" />
                             </div>
                             <div className="w-full">
                                 <label htmlFor="dimensiones" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Dimsiones</label>
-                                <input type="text" name="dimensiones" id="dimensiones" onChange={(e) => setNuevoProducto({ ...nuevoProducto, dimensiones: e.target.value })} value={nuevoProducto.dimensiones} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg " placeholder="dimensiones" required="" />
+                                <input type="text" name="dimensiones" id="dimensiones" onChange={(e) => setNuevoProducto({ ...nuevoProducto, dimensiones: e.target.value })} value={nuevoProducto.dimensiones} className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg" placeholder="dimensiones" required="" />
                             </div>
                             <div className="w-full">
                                 <label htmlFor="materiales" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Materiales</label>
-                                <input type="text" name="materiales" id="materiales" onChange={(e) => setNuevoProducto({ ...nuevoProducto, material: e.target.value })} value={nuevoProducto.material} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg " placeholder="materiales" required="" />
+                                <input type="text" name="materiales" id="materiales" onChange={(e) => setNuevoProducto({ ...nuevoProducto, material: e.target.value })} value={nuevoProducto.material} className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg" placeholder="materiales" required="" />
                             </div>
                             <div className="sm:col-span-2">
                                 <label htmlFor="description" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Descripcion</label>

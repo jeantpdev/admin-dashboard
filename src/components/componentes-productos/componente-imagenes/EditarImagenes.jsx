@@ -5,8 +5,6 @@ import { archivos, crearForm, limpiarForm, limpiarArchivosElegidos } from '@/uti
 
 const EditarImagen = (props) => {
 
-    console.log(props)
-
     const [imagenPrincipal, setImagenPrincipal] = useState(props.imagen_principal);
     const [imagenesProductos, setImagenesProductos] = useState(props.imagenes_productos);
     const [selectedFiles, setSelectedFiles] = useState([]);
@@ -108,8 +106,20 @@ const EditarImagen = (props) => {
         }
     };
 
+    /*
+    const handleCloseMenu = () => {
+        props.onClose();
+    };
+    */
+
     return (
         <div className='w-full'>
+            {/*
+            <div className="flex justify-between items-center mb-4">
+                <h2 className="text-sm lg:text-xl font-bold text-gray-900">Editar producto</h2>
+                <button onClick={handleCloseMenu}>X</button>
+            </div>
+            */}
             <div className='space-y-2'>
                 <label htmlFor="imagen principal" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Imagen principal</label>
                 <div className='flex justify-start gap-x-5'>

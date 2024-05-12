@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import EditarProducto from '@/components/componentes-productos/EditarProducto.jsx'
 import { convertirAMoneda } from '@/utils/Funct.jsx';
 import { eliminarProducto } from '@/utils/api.js';
+import { recargarPagina } from '@/utils/Funct'
 
 export default function FilaTabla(props) {
 
@@ -17,6 +18,7 @@ export default function FilaTabla(props) {
         try {
             const response = await eliminarProducto(id);
             console.log('Producto eliminado:', response);
+            props.actualizar_tabla()
         } catch (error) {
             console.error('Error al eliminar el producto:', error.message);
         }
@@ -24,7 +26,7 @@ export default function FilaTabla(props) {
 
     const handleCloseMenu = () => {
         setMenuEdicionAbierto(false);
-        props.actualizar_tabla()
+        props.actualizar_tabla() // Se recibe actualizar_tabla para que cuando se cierre el modal, se ejecute fetchData y se actualicen los datos de la pagina
     };
 
     return (

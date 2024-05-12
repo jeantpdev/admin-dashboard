@@ -58,7 +58,8 @@ export default function EditarProducto({ producto, onClose }) {
                     <div className=''>
                         {/* COMPONENTE DE IMAGENES */}
                         <div>
-                            <EditarImagen id={id} imagen_principal={imagenPrincipalEditada} imagenes_productos={imagenesProductosEditada} />
+                            <EditarImagen id={id} imagen_principal={imagenPrincipalEditada} imagenes_productos={imagenesProductosEditada}/>
+                            {/* <EditarImagen id={id} imagen_principal={imagenPrincipalEditada} imagenes_productos={imagenesProductosEditada} onClose = {onClose}/> */}
                         </div>
                         {/* COMPONENTE DE FORMULARIO DEL PRODUCTO */}
                         <div>

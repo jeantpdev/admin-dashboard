@@ -7,7 +7,7 @@ const getAccessToken = () => {
 export const traerPedidos = async () => {
     const access_token = getAccessToken();
     try {
-        const response = await axios.get('https://mongodb-productos.onrender.com/pedidos/', { 
+        const response = await axios.get('http://127.0.0.1:5900/pedidos/', { 
             headers: {
               'Authorization' : 'Bearer ' + access_token
             }

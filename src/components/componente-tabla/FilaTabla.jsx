@@ -24,7 +24,7 @@ export default function FilaTabla(props) {
 
     const handleCloseMenu = () => {
         setMenuEdicionAbierto(false);
-        props.actualizar_tabla()
+        //props.actualizar_tabla()
     };
 
     return (
