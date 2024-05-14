@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import EditarProducto from '@/components/componentes-productos/EditarProducto.jsx'
-import { convertirAMoneda } from '@/utils/Funct.jsx';
+import VerPedido from '@/components/componentes-pedidos/VerPedido.jsx'
 import { eliminarProducto } from '@/utils/api.js';
 
 export default function Pedidos(props) {
