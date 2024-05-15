@@ -36,17 +36,6 @@ export default function Tabla(props) {
                         />
                     )):null
                 }
-
-            {/* 
-                            {props.data && props.data.map((datos) => (
-                    <FilaTabla
-                        key={datos._id}
-                        {...datos}
-                        actualizar_tabla={props.actualizar_tabla}
-                    />
-                ))
-            }
-            */}
                 </tbody>
             </table>
         </div>

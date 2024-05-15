@@ -52,7 +52,7 @@ export default function Pedidos(props) {
 
                 <td className="py-5 space-x-2 px-6 flex">
                     <button onClick={() => handleVerPedido(props)}>Ver</button>
-                    <button onClick={() => handleEliminar(props._id)}>Eliminar</button>
+                    {/*<button onClick={() => handleEliminar(props._id)}>Eliminar</button>*/}
                 </td>
             </tr>
 
