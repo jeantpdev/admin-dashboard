@@ -1,5 +1,4 @@
 import { convertirAMoneda } from '@/utils/Funct'
-import p from 'dist/_astro/LoginForm.DPr3K8e2'
 import React from 'react'
 
 export default function DatosDelPedido(props) {
