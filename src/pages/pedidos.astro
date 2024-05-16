@@ -13,8 +13,9 @@ const titulosTabla = [
   ]
 
 const tipo = "pedidos"
+const pageTitle = "Dashboard - Pedidos"
 ---
 
-<Layout title="Welcome to Astro.">
+<Layout title={pageTitle}>
     <PaginaPrincipal titulosTabla = {titulosTabla} tipo = {tipo} client:load/>
 </Layout>
