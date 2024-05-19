@@ -7,12 +7,12 @@ const getAccessToken = () => {
 export const traerPedidos = async () => {
     const access_token = getAccessToken();
     try {
-        const response = await axios.get('http://127.0.0.1:5900/pedidos/', { 
+        const response = await axios.get('https://mongodb-productos.onrender.com/pedidos/', { 
             headers: {
               'Authorization' : 'Bearer ' + access_token
             }
           });
-        return response.data; // O puedes devolver cualquier otra cosa que necesites
+        return response.data;
     } catch (error) {
         throw new Error('Error al eliminar el producto:', error);
     }

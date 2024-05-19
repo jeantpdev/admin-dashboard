@@ -1,16 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { generarNumeroAleatorio } from '@/utils/Funct';
+import { enviarDatosProductos } from '@/utils/api';
 
 export default function AgregarProducto(props) {
-
-    console.log(props)
-
-    const handleCloseMenu = () =>{
-        props.onClose()
-        props.actualizar_tabla()
-    }
-
     const [nuevoProducto, setNuevoProducto] = useState({
         nombre: '',
         categoria: '',
@@ -21,10 +13,16 @@ export default function AgregarProducto(props) {
         descripcion: ''
     });
 
+    // Permite actualizar un preview de las imagenes a enviar luego de ser seleccionadas "seleccionar archivos"
     const [imagenPrincipal, setImagenPrincipal] = useState("");
     const [imagenesSecundaria, setImagenesSecundaria] = useState([]);
 
+    const handleCloseMenu = () =>{
+        props.onClose()
+        props.actualizar_tabla()
+    }
 
+    // Permite almacenar las imagenes seleccionadas con el "seleccionar archivo"
     const [imagenPrincipalSeleccionada, setImagenPrincipalSeleccionada] = useState([]);
     const [imagenesSecundariasSeleccionada, setImagenesSecundariasSeleccionada] = useState([]);
 
@@ -34,6 +32,13 @@ export default function AgregarProducto(props) {
         setImagenPrincipalSeleccionada(filesArray)
     };
 
+    const manejoImagenesSecundarias = (event) => {
+        const files = event.target.files;
+        const filesArray = Array.from(files);
+        setImagenesSecundariasSeleccionada(filesArray);
+    };
+
+    // Se ejecuta cada que imagenPrincipalSeleccionada cambia y permite ver la preview de la imagen seleccionada
     useEffect(() => {
         if(imagenPrincipalSeleccionada.length != 0){
             const reader = new FileReader();
@@ -45,12 +50,7 @@ export default function AgregarProducto(props) {
 
     }, [imagenPrincipalSeleccionada]);
 
-    const manejoImagenesSecundarias = (event) => {
-        const files = event.target.files;
-        const filesArray = Array.from(files);
-        setImagenesSecundariasSeleccionada(filesArray);
-    };
-
+    // Se ejecuta cada que imagenPrincipalSeleccionada cambia y permite ver la preview de las imagenes seleccionadas
     useEffect(() => {
         if (imagenesSecundariasSeleccionada.length !== 0) {
             const promises = imagenesSecundariasSeleccionada.map(file => {
@@ -74,8 +74,7 @@ export default function AgregarProducto(props) {
         }
     }, [imagenesSecundariasSeleccionada]);
 
-const handleAgregarNuevoProducto = async (event) => {
-    event.preventDefault();
+const agregarImagenesFormData = () => {
 
     const formData = new FormData();
     imagenPrincipalSeleccionada.forEach((file) => {
@@ -86,9 +85,23 @@ const handleAgregarNuevoProducto = async (event) => {
         formData.append('imagenes_secundarias', file);
     });
     
+}
+
+const enviarImagenesServidor = async () => {
+    const res = await enviarImagenes(formData);
+    const { url_imagen_principal, urls_imagenes_secundarias } = res;
+
+    return { url_imagen_principal, urls_imagenes_secundarias }
+}
+
+const handleAgregarNuevoProducto = async (event) => {
+    event.preventDefault();
+
+    agregarImagenesFormData()
+
+    const { url_imagen_principal, urls_imagenes_secundarias } = enviarImagenesServidor()
+
     try {
-        const res = await enviarImagenes(formData);
-        const { url_imagen_principal, urls_imagenes_secundarias } = res.data;
 
         const datosProducto = {
             _id: generarNumeroAleatorio(),
@@ -97,13 +110,11 @@ const handleAgregarNuevoProducto = async (event) => {
             precio: nuevoProducto.precio,
             descuento: nuevoProducto.descuento || 0,
             descripcion: nuevoProducto.descripcion || "no dado",
-            imagen_principal: url_imagen_principal, // Actualizar aquí con el valor recién asignado
-            imagenes_productos: urls_imagenes_secundarias, // Actualizar aquí con el valor recién asignado
+            imagen_principal: url_imagen_principal,
+            imagenes_productos: urls_imagenes_secundarias,
             dimensiones: nuevoProducto.dimensiones || "no dado",
             material: nuevoProducto.material || "no dado"
         };
-
-        console.log(datosProducto);
 
         const resInsertarProducto = await enviarDatosProductos(datosProducto)
 
@@ -113,37 +124,6 @@ const handleAgregarNuevoProducto = async (event) => {
         console.error('Error al enviar las imágenes:', error);
     }
 };
-
-    const enviarImagenes = async(formData) =>{
-        const access_token = localStorage.getItem('access_token')
-        try {
-            const response = await axios.post('http://127.0.0.1:5900/crear-imagen/', formData, {
-                headers: {
-                    'Authorization' : 'Bearer ' + access_token,
-                    'Content-Type': 'multipart/form-data'
-                },
-            });
-            console.log('Imágenes enviadas exitosamente');
-            return response
-        } catch (error) {
-            console.error('Error al enviar las imágenes:', error);
-        }
-    }
-
-    const enviarDatosProductos = async(datosProducto) =>{
-        const access_token = localStorage.getItem('access_token')
-        try {
-            const response = await axios.post('http://127.0.0.1:5900/insertar-producto/', datosProducto, {
-                headers: {
-                    'Authorization' : 'Bearer ' + access_token
-                },
-            });
-            console.log('Producto enviado exitosamente');
-            return response
-        } catch (error) {
-            console.error('Error al enviar los datos del producto:', error);
-        }
-    }
 
     return (
         <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center">
@@ -177,10 +157,8 @@ const handleAgregarNuevoProducto = async (event) => {
                             }
                         </div>
 
-                        <input type="file" multiple onChange={manejoImagenesSecundarias} /> {/* ACA SE GUARDAN LA IMAGEN EN selectedFile */}
-                       {/* <button onClick={enviarImagenesAlServidor}>Enviar Imágenes</button> */} 
+                        <input type="file" multiple onChange={manejoImagenesSecundarias} />
                     </div>
-                    {/* IMAGENES */}
 
                     <form onSubmit={handleAgregarNuevoProducto}>
                         <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">

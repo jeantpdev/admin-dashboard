@@ -6,8 +6,6 @@ import Pedidos from './Filas/Pedidos'
 
 export default function Tabla(props) {
 
-    console.log(props)
-
     return (
         <div className="relative h-[800px] overflow-x-auto">
             <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">

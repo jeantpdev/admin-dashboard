@@ -85,7 +85,7 @@ export const limpiarArchivosElegidos = (selectedFiles) => {
 }
 
 export const recargarPagina = () => {
-    window.location.reload(); // Recarga la página
+    window.location.reload();
   };
 
 
