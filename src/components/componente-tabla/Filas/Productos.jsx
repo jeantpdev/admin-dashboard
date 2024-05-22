@@ -3,6 +3,8 @@ import EditarProducto from '@/components/componentes-productos/EditarProducto.js
 import { convertirAMoneda } from '@/utils/Funct.jsx';
 import { eliminarProducto } from '@/utils/api.js';
 import { recargarPagina } from '@/utils/Funct'
+import IconoEditar from '@/components/Icons/IconoEditar';
+import IconoEliminar from '@/components/Icons/IconoEliminar';
 
 export default function FilaTabla(props) {
 
@@ -47,8 +49,8 @@ export default function FilaTabla(props) {
                 </td>
 
                 <td className="py-5 space-x-2 px-6 flex">
-                    <button onClick={() => handleEditarProducto(props)}>Editar</button>
-                    <button onClick={() => handleEliminar(props._id)}>Eliminar</button>
+                    <button onClick={() => handleEditarProducto(props)}><IconoEditar /></button>
+                    <button onClick={() => handleEliminar(props._id)}><IconoEliminar /></button>
                 </td>
             </tr>
 

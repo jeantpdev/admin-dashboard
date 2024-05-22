@@ -3,6 +3,7 @@ import Tabla from '@/components/componente-tabla/Tabla.jsx';
 import AgregarProducto from '@/components/componentes-productos/AgregarProducto';
 import { traerProductos } from '@/utils/api.js';
 import { traerPedidos } from '@/utils/apiPedidos.js';
+import IconoAgregar from './Icons/IconoAgregar';
 
 export default function PaginaPrincipal(props) {
 
@@ -50,7 +51,7 @@ export default function PaginaPrincipal(props) {
       <div className="flex justify-between">
         <h1 className="text-3xl font-extrabold text-zinc-800">{props.tipo === "productos" ? "Productos" : "Pedidos"}</h1>
         {props.tipo === "productos" && (
-          <button className="bg-slate-800 p-2 text-white rounded-md" onClick={handleAbrirMenuAgregarProducto}>Agregar producto</button>
+          <button className="flex gap-2 bg-slate-800 p-2 text-white rounded-md" onClick={handleAbrirMenuAgregarProducto}><IconoAgregar />Agregar producto</button>
         )}
       </div>
       
