@@ -1,4 +1,4 @@
-# Tienda de productos - Dashboard
+# Tienda de productos - API
 
 ## Informacion general
 
@@ -37,12 +37,16 @@ API - Productos [Repositorio Backend](https://github.com/jeantpdev/mongodb-produ
 
 **Frontend**:
   * Astro
-  * React Backend:
+  * React
+    
+**Backend**:
   * Python
   * Flask
     
 **Base de datos**:
-  * MongoDB Hosting:
+  * MongoDB
+  
+**Hosting**:
   * Pagina: Vercel o Netlify
   * API: Render o PythonAnyWhere
 
@@ -54,7 +58,7 @@ API - Productos [Repositorio Backend](https://github.com/jeantpdev/mongodb-produ
  * Cloudinary: Servicio para subir multimedia
  * JWT: Autenticacion del usuario
 
-Flujo de trabajos:
+## Flujo de trabajos:
 
 VACIO
 
@@ -68,4 +72,3 @@ VACIO
 
 ### Iniciar sesion
 ![Diagrama ver productos](https://res.cloudinary.com/dkuw4zg2h/image/upload/f_auto,q_auto/Joyeria/Diagramas%20de%20flujo/iniciar-sesion.png)
-
