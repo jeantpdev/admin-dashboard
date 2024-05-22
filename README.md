@@ -1,54 +1,71 @@
-# Astro Starter Kit: Basics
+# Tienda de productos - Dashboard
 
-```sh
-npm create astro@latest -- --template basics
-```
+## Informacion general
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/basics)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/basics)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/basics/devcontainer.json)
+Una tienda de productos que permite agregar productos al carrito Y realizar el pedido. Se recibe un correo con los datos del pedido 
+realizado tanto para el cliente como para el administrador del sitio.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Cuenta con 2 aplicativos web los cuales son:
 
-![just-the-basics](https://github.com/withastro/astro/assets/2244813/a0a5533c-a856-4198-8470-2d67b1d7c554)
+* **Tienda de productos**: Es la pagina que va a contener todos los productos
+disponibles para comprar
 
-## 🚀 Project Structure
+* **Dashboard**: Permite controlar el inventario de los productos pudiendo eliminar
+editar o agregar nuevos productos
 
-Inside of your Astro project, you'll see the following folders and files:
+Y un backend:
 
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src/
-│   ├── components/
-│   │   └── Card.astro
-│   ├── layouts/
-│   │   └── Layout.astro
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+* **Productos**: Es la API que nos permite hacer las consultas a la BD y poder mostrarla a la pagina.
+Va a contener todas las funciones relacionadas a eliminar, agregar o editar
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Funciones
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+* Ver productos disponibles
+* Agregar productos al carrito
+* Eliminar productos del carrito
+* Enviar productos del carrito al administrador del sitio
 
-Any static assets, like images, can be placed in the `public/` directory.
+## Repositorios
 
-## 🧞 Commands
+Tienda [Repositorio Tienda](https://github.com/jeantpdev/tienda-landingPage).
 
-All commands are run from the root of the project, from a terminal:
+Dashboard [Repositorio Dashboard](https://github.com/jeantpdev/admin-dashboard).
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+API - Productos [Repositorio Backend](https://github.com/jeantpdev/mongodb-productos).
 
-## 👀 Want to learn more?
+## Tecnologias a usar
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+**Frontend**:
+  * Astro
+  * React Backend:
+  * Python
+  * Flask
+    
+**Base de datos**:
+  * MongoDB Hosting:
+  * Pagina: Vercel o Netlify
+  * API: Render o PythonAnyWhere
+
+**Documentación**:
+  * Api: Swagger
+  * Pagina web: Notion o Obsidian
+    
+**Otros**:
+ * Cloudinary: Servicio para subir multimedia
+ * JWT: Autenticacion del usuario
+
+Flujo de trabajos:
+
+VACIO
+
+## Diagramas de flujo:
+
+### Ver productos
+![Diagrama ver productos](https://res.cloudinary.com/dkuw4zg2h/image/upload/f_auto,q_auto/Joyeria/Diagramas%20de%20flujo/ver-productos.png)
+
+### Insertar productos
+![Diagrama ver productos](https://res.cloudinary.com/dkuw4zg2h/image/upload/f_auto,q_auto/Joyeria/Diagramas%20de%20flujo/insertar-productos.png)
+
+### Iniciar sesion
+![Diagrama ver productos](https://res.cloudinary.com/dkuw4zg2h/image/upload/f_auto,q_auto/Joyeria/Diagramas%20de%20flujo/iniciar-sesion.png)
+
