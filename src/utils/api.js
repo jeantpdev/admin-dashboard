@@ -15,7 +15,7 @@ export const enviarDatosProductos = async(datosProducto) =>{
                 'Authorization' : 'Bearer ' + access_token
             },
         });
-        console.log('Producto enviado exitosamente');
+        console.log(response)
         return response
     } catch (error) {
         console.error('Error al enviar los datos del producto:', error);
@@ -31,7 +31,7 @@ export const enviarImagenes = async(formData) =>{
                 'Content-Type': 'multipart/form-data'
             },
         });
-        console.log('Imágenes enviadas exitosamente');
+        console.log(response)
         return response.data
     } catch (error) {
         console.error('Error al enviar las imágenes:', error);
@@ -48,6 +48,7 @@ export const guardarImagen = async (formData) => {
                 'Content-Type': 'multipart/form-data',
             },
         });
+        console.log(response)
         return response.data
     } catch (error) {
         throw new Error('Error al enviar las imágenes:', error);
@@ -62,7 +63,10 @@ export const eliminarProducto = async (id) => {
                 'Authorization': `Bearer ${access_token}`,
             },
         });
-        return response.data; // O puedes devolver cualquier otra cosa que necesites
+        console.log(response)
+        if (response.status == 200){
+            return response.data; // O puedes devolver cualquier otra cosa que necesites
+        }
     } catch (error) {
         throw new Error('Error al eliminar el producto:', error);
     }
@@ -91,9 +95,13 @@ export const editarProducto = async (datosActualizados) => {
                 'Authorization': `Bearer ${access_token}`,
             },
         });
-        return response.data; // O puedes devolver cualquier otra cosa que necesites
+        console.log(response)
+        if (response.status == 200){
+            return response.data;
+        }
+       
     } catch (error) {
-        throw new Error('Error al eliminar el producto:', error);
+        throw new Error('Error al editar el producto:', error);
     }
 };
 
@@ -106,6 +114,7 @@ export const eliminarImagen = async (datosImagen) => {
                 'Authorization' : 'Bearer ' + access_token
               },
         });
+        console.log(response)
         return response;
     } catch (error) {
         throw new Error('Error al enviar las imágenes:', error);

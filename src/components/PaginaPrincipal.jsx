@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import Swal from 'sweetalert2';
 import Tabla from '@/components/componente-tabla/Tabla.jsx';
 import AgregarProducto from '@/components/componentes-productos/AgregarProducto';
 import { traerProductos } from '@/utils/api.js';
 import { traerPedidos } from '@/utils/apiPedidos.js';
+import { showAlert, showLoader } from '@/utils/Alerts.js';
 import IconoAgregar from './Icons/IconoAgregar';
 
 export default function PaginaPrincipal(props) {
@@ -20,13 +22,15 @@ export default function PaginaPrincipal(props) {
       }
 
       if (props.tipo === "productos") {
-        console.log("Actualizando tabla...")
+        showLoader("Actualizando tabla...")
         const response = await traerProductos();
         setProductos(response.productos);
-        console.log("Tabla actualizada")
+        Swal.close()
       } else if (props.tipo === "pedidos") {
+        showLoader("Actualizando tabla...")
         const response = await traerPedidos();
         setPedidos(response.pedidos);
+        Swal.close()
       }
     } catch (error) {
       console.error(error.message);

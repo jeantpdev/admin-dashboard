@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import EditarProducto from '@/components/componentes-productos/EditarProducto.jsx'
 import { convertirAMoneda } from '@/utils/Funct.jsx';
 import { eliminarProducto } from '@/utils/api.js';
-import { recargarPagina } from '@/utils/Funct'
+import { showAlert } from '@/utils/Alerts.js';
 import IconoEditar from '@/components/Icons/IconoEditar';
 import IconoEliminar from '@/components/Icons/IconoEliminar';
+import Swal from 'sweetalert2';
 
 export default function FilaTabla(props) {
 
@@ -16,10 +17,33 @@ export default function FilaTabla(props) {
         setMenuEdicionAbierto(true);
     };
 
+    const manejarConfirmacion = (id) =>{
+        Swal.fire({
+            title: "¿Estás seguro?",
+            text: "¿Quieres eliminar este producto?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Sí, eliminarlo"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: "¡Eliminado!",
+                    text: "El producto ha sido eliminado!",
+                    icon: "success"
+                });
+                handleEliminar(id)
+            }
+        });
+    }
+
     const handleEliminar = async (id) => {
         try {
+
             const response = await eliminarProducto(id);
             console.log('Producto eliminado:', response);
+            showAlert("Producto eliminado")
             props.actualizar_tabla()
         } catch (error) {
             console.error('Error al eliminar el producto:', error.message);
@@ -50,7 +74,7 @@ export default function FilaTabla(props) {
 
                 <td className="py-5 space-x-2 px-6 flex">
                     <button onClick={() => handleEditarProducto(props)}><IconoEditar /></button>
-                    <button onClick={() => handleEliminar(props._id)}><IconoEliminar /></button>
+                    <button onClick={() => manejarConfirmacion(props._id)}><IconoEliminar /></button>
                 </td>
             </tr>
 

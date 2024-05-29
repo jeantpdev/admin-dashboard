@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { eliminarImagen, traerProductos, guardarImagen } from '@/utils/api.js';
 import { archivos, crearForm, limpiarForm, limpiarArchivosElegidos } from '@/utils/Funct';
+import { showAlert, showError } from '@/utils/Alerts.js';
 
 const EditarImagen = (props) => {
 
@@ -41,8 +42,8 @@ const EditarImagen = (props) => {
             const res = await eliminarImagen(datosImagen);
 
             if (res.data['status_imagen_eliminada'] == "correcto") {
-                setImagenPrincipal("no dado"); // se actualiza el estado de la imagen. En el HTML se valida si es "no dado", se el asigna una URL
-
+                setImagenPrincipal("no dado"); // se actualiza el estado de la imagen. En el HTML se valida si es "no dado", se el asigna una URL   
+                showAlert("Imagen eliminada!")
             }
         } catch (error) {
             console.error('Error al eliminar la imagen:', error);
@@ -64,6 +65,7 @@ const EditarImagen = (props) => {
                 const response = await traerProductos();
                 const nuevasImagenes = actualizarVistaPreviaImagenesSecundarias(response, datosImagen)
                 actualizarImagenesSecundarias(nuevasImagenes)
+                showAlert("Imagen eliminada!")
             }
         } catch (error) {
             console.error('Error al eliminar la imagen:', error);
@@ -74,7 +76,7 @@ const EditarImagen = (props) => {
 
         // Si no se ha elegido imagenes, error en consola
         if (!selectedFiles.length) {
-            console.log("Tienes que seleccionar imagenes")
+            showError("Tienes que seleccionar imagenes")
             return;
         }
 
@@ -85,17 +87,19 @@ const EditarImagen = (props) => {
 
             if (response) {
                 //La repuesta viene en un array "url_imagenes"
-                console.log("entraste a imagen principal")
                 if (tipo_imagen === "imagen principal") {
                     //Si fue solo una imagen (imagen principal) se coje solamente el primer indice
                     actualizarImagenPrincipal(response.urls_imagenes[0])
+                    showAlert("Imagen agregada!")
                 } else if (tipo_imagen === "imagenes secundarias") {
                     // Si fueron varias imagenes (imagenes productos) se hac una copia de la actual junto con las nuevas
                     const nuevasImagenes = [...imagenesProductos, ...response.urls_imagenes];
                     actualizarImagenesSecundarias(nuevasImagenes);
+                    showAlert("Imagen agregada!")
                 }
                 limpiarForm()
-                limpiarArchivosElegidos(selectedFiles) 
+                limpiarArchivosElegidos(selectedFiles)
+                setSelectedFiles([]);
 
             } else{
                 console.log("Ocurio un error", response)
@@ -105,12 +109,6 @@ const EditarImagen = (props) => {
             console.error('Error al enviar las imágenes:', error);
         }
     };
-
-    /*
-    const handleCloseMenu = () => {
-        props.onClose();
-    };
-    */
 
     return (
         <div className='w-full'>

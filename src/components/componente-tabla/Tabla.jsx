@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import FilaTabla from '@/components/componente-tabla/FilaTabla'
 import FilaProductos from '@/components/componente-tabla/Filas/Productos'
 import FilaPedidos from '@/components/componente-tabla/Filas/Pedidos'
-import Pedidos from './Filas/Pedidos'
+import { showLoader } from '@/utils/Alerts.js';
 
 export default function Tabla(props) {
 

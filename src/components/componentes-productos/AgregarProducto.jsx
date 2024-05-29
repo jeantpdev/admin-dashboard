@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { showAlert, showLoader, showError } from '@/utils/Alerts.js';
 import { generarNumeroAleatorio } from '@/utils/Funct';
-import { enviarDatosProductos } from '@/utils/api';
+import { enviarDatosProductos, enviarImagenes } from '@/utils/api';
+import Swal from 'sweetalert2';
 
 export default function AgregarProducto(props) {
     const [nuevoProducto, setNuevoProducto] = useState({
@@ -17,7 +19,7 @@ export default function AgregarProducto(props) {
     const [imagenPrincipal, setImagenPrincipal] = useState("");
     const [imagenesSecundaria, setImagenesSecundaria] = useState([]);
 
-    const handleCloseMenu = () =>{
+    const handleCloseMenu = () => {
         props.onClose()
         props.actualizar_tabla()
     }
@@ -40,7 +42,7 @@ export default function AgregarProducto(props) {
 
     // Se ejecuta cada que imagenPrincipalSeleccionada cambia y permite ver la preview de la imagen seleccionada
     useEffect(() => {
-        if(imagenPrincipalSeleccionada.length != 0){
+        if (imagenPrincipalSeleccionada.length != 0) {
             const reader = new FileReader();
             reader.onloadend = () => {
                 setImagenPrincipal(reader.result);
@@ -74,56 +76,74 @@ export default function AgregarProducto(props) {
         }
     }, [imagenesSecundariasSeleccionada]);
 
-const agregarImagenesFormData = () => {
-
-    const formData = new FormData();
-    imagenPrincipalSeleccionada.forEach((file) => {
-        formData.append('imagen_principal', file);
-    });
-
-    imagenesSecundariasSeleccionada.forEach((file) => {
-        formData.append('imagenes_secundarias', file);
-    });
+    const agregarImagenesFormData = () => {
+        const formData = new FormData();
     
-}
-
-const enviarImagenesServidor = async () => {
-    const res = await enviarImagenes(formData);
-    const { url_imagen_principal, urls_imagenes_secundarias } = res;
-
-    return { url_imagen_principal, urls_imagenes_secundarias }
-}
-
-const handleAgregarNuevoProducto = async (event) => {
-    event.preventDefault();
-
-    agregarImagenesFormData()
-
-    const { url_imagen_principal, urls_imagenes_secundarias } = enviarImagenesServidor()
-
-    try {
-
-        const datosProducto = {
-            _id: generarNumeroAleatorio(),
-            nombre_producto: nuevoProducto.nombre,
-            categoria: nuevoProducto.categoria,
-            precio: nuevoProducto.precio,
-            descuento: nuevoProducto.descuento || 0,
-            descripcion: nuevoProducto.descripcion || "no dado",
-            imagen_principal: url_imagen_principal,
-            imagenes_productos: urls_imagenes_secundarias,
-            dimensiones: nuevoProducto.dimensiones || "no dado",
-            material: nuevoProducto.material || "no dado"
-        };
-
-        const resInsertarProducto = await enviarDatosProductos(datosProducto)
-
-        console.log(resInsertarProducto)
-
-    } catch (error) {
-        console.error('Error al enviar las imágenes:', error);
+        if (!imagenPrincipalSeleccionada.length && !imagenesSecundariasSeleccionada.length) {
+            return false;
+        }
+    
+        imagenPrincipalSeleccionada.forEach((file) => {
+            formData.append('imagen_principal', file);
+        });
+    
+        imagenesSecundariasSeleccionada.forEach((file) => {
+            formData.append('imagenes_secundarias', file);
+        });
+    
+        return formData;
     }
-};
+    
+    const enviarImagenesServidor = async (formData) => {
+        try {
+            const res = await enviarImagenes(formData);
+            const { url_imagen_principal, urls_imagenes_secundarias } = res;
+    
+            return { url_imagen_principal, urls_imagenes_secundarias };
+        } catch (error) {
+            console.error('Error al enviar las imágenes:', error);
+            throw error;
+        }
+    }
+    
+    const handleAgregarNuevoProducto = async (event) => {
+        event.preventDefault();
+        showLoader("Enviando imágenes...");
+    
+        const formData = agregarImagenesFormData();
+    
+        if (!formData) {
+            showError("Verifica haber elegido imágenes");
+            return;
+        }
+    
+        try {
+            const { url_imagen_principal, urls_imagenes_secundarias } = await enviarImagenesServidor(formData);
+            showLoader("Enviando datos del producto...");
+    
+            const datosProducto = {
+                _id: generarNumeroAleatorio(),
+                nombre_producto: nuevoProducto.nombre,
+                categoria: nuevoProducto.categoria,
+                precio: nuevoProducto.precio,
+                descuento: nuevoProducto.descuento || 0,
+                descripcion: nuevoProducto.descripcion || "no dado",
+                imagen_principal: url_imagen_principal,
+                imagenes_productos: urls_imagenes_secundarias,
+                dimensiones: nuevoProducto.dimensiones || "no dado",
+                material: nuevoProducto.material || "no dado"
+            };
+        
+            const res = await enviarDatosProductos(datosProducto);
+            Swal.close()
+            showAlert("Producto agregado!")
+        } catch (error) {
+            console.error('Error al enviar los datos del producto:', error);
+            showError('Error al enviar los datos del producto');
+            Swal.close()
+        }
+
+    };
 
     return (
         <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center">
@@ -137,23 +157,23 @@ const handleAgregarNuevoProducto = async (event) => {
                     {/* IMAGENES */}
                     <div className='w-full space-y-5'>
                         <div className="space-y-5">
-                                <label htmlFor="imagenes" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Seleccionar imagen principal</label>
-                                <img src= {imagenPrincipal == "" ? "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png" : `${imagenPrincipal}` } className='w-20 h-18 object-cover' alt="" />
-                                <input type="file" onChange={manejoImagenPrincipal} /> {/* ACA SE GUARDAN LA IMAGEN EN selectedFile */}
-                            </div>
+                            <label htmlFor="imagenes" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Seleccionar imagen principal</label>
+                            <img src={imagenPrincipal == "" ? "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png" : `${imagenPrincipal}`} className='w-20 h-18 object-cover' alt="" />
+                            <input type="file" onChange={manejoImagenPrincipal} /> {/* ACA SE GUARDAN LA IMAGEN EN selectedFile */}
+                        </div>
 
-                        <div className='flex gap-2 flex-wrap'> 
+                        <div className='flex gap-2 flex-wrap'>
 
-                            { imagenesSecundaria != 0 ?
-                            imagenesSecundaria.map((imagen, index) => (
-                                <div key={index} className="relative">
-                                    <img src={imagen} className='w-20 h-18 object-cover' alt="" />
+                            {imagenesSecundaria != 0 ?
+                                imagenesSecundaria.map((imagen, index) => (
+                                    <div key={index} className="relative">
+                                        <img src={imagen} className='w-20 h-18 object-cover' alt="" />
+                                    </div>
+                                )) :
+                                <div className="relative">
+                                    <label htmlFor="imagenes" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Seleccionar imagen secundaria</label>
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png" className='w-20 h-18' alt="" />
                                 </div>
-                            )): 
-                            <div className="relative">
-                                <label htmlFor="imagenes" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Seleccionar imagen secundaria</label>
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png" className='w-20 h-18' alt="" />
-                            </div>
                             }
                         </div>
 
@@ -164,27 +184,27 @@ const handleAgregarNuevoProducto = async (event) => {
                         <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
                             <div className="sm:col-span-2">
                                 <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre producto</label>
-                                <input type="text" name="name" id="name" onChange={(e) => setNuevoProducto({ ...nuevoProducto, nombre: e.target.value })} value={nuevoProducto.nombre} className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg" placeholder="nombre del producto" required="" />
+                                <input type="text" name="name" id="name" onChange={(e) => setNuevoProducto({ ...nuevoProducto, nombre: e.target.value })} value={nuevoProducto.nombre} className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg" placeholder="nombre del producto" required />
                             </div>
                             <div className="w-full">
                                 <label htmlFor="brand" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Categoria</label>
-                                <input type="text" name="brand" id="brand" onChange={(e) => setNuevoProducto({ ...nuevoProducto, categoria: e.target.value })} value={nuevoProducto.categoria} className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg" placeholder="categoria" required="" />
+                                <input type="text" name="brand" id="brand" onChange={(e) => setNuevoProducto({ ...nuevoProducto, categoria: e.target.value })} value={nuevoProducto.categoria} className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg" placeholder="categoria" required />
                             </div>
                             <div className="w-full">
                                 <label htmlFor="price" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Precio</label>
-                                <input type="number" name="price" id="price" onChange={(e) => setNuevoProducto({ ...nuevoProducto, precio: e.target.value })} value={nuevoProducto.precio} className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg" placeholder="precio" required="" />
+                                <input type="number" name="price" id="price" onChange={(e) => setNuevoProducto({ ...nuevoProducto, precio: e.target.value })} value={nuevoProducto.precio} className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg" placeholder="precio" required />
                             </div>
                             <div className="w-full">
                                 <label htmlFor="descuento" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Descuento</label>
-                                <input type="number" name="descuento" id="descuento" onChange={(e) => setNuevoProducto({ ...nuevoProducto, descuento: e.target.value })} value={nuevoProducto.descuento} className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg" placeholder="descuento" required="" />
+                                <input type="number" name="descuento" id="descuento" onChange={(e) => setNuevoProducto({ ...nuevoProducto, descuento: e.target.value })} value={nuevoProducto.descuento} className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg" placeholder="descuento" required />
                             </div>
                             <div className="w-full">
                                 <label htmlFor="dimensiones" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Dimsiones</label>
-                                <input type="text" name="dimensiones" id="dimensiones" onChange={(e) => setNuevoProducto({ ...nuevoProducto, dimensiones: e.target.value })} value={nuevoProducto.dimensiones} className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg" placeholder="dimensiones" required="" />
+                                <input type="text" name="dimensiones" id="dimensiones" onChange={(e) => setNuevoProducto({ ...nuevoProducto, dimensiones: e.target.value })} value={nuevoProducto.dimensiones} className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg" placeholder="dimensiones" required />
                             </div>
                             <div className="w-full">
                                 <label htmlFor="materiales" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Materiales</label>
-                                <input type="text" name="materiales" id="materiales" onChange={(e) => setNuevoProducto({ ...nuevoProducto, material: e.target.value })} value={nuevoProducto.material} className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg" placeholder="materiales" required="" />
+                                <input type="text" name="materiales" id="materiales" onChange={(e) => setNuevoProducto({ ...nuevoProducto, material: e.target.value })} value={nuevoProducto.material} className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg" placeholder="materiales" required />
                             </div>
                             <div className="sm:col-span-2">
                                 <label htmlFor="description" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Descripcion</label>

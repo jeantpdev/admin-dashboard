@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import EditarImagen from '@/components/componentes-productos/componente-imagenes/EditarImagenes'
 import { editarProducto } from '@/utils/api.js';
+import { showAlert, showError, showLoader } from '@/utils/Alerts.js';
+import Swal from 'sweetalert2';
 
 export default function EditarProducto({ producto, onClose }) {
 
@@ -20,7 +22,7 @@ export default function EditarProducto({ producto, onClose }) {
     // Solamente envia los datos del producto 
     const handleGuardarCambios = async (event) => {
         event.preventDefault();
-
+        showLoader("Editando producto...")
         const datosActualizados = {
             _id: id,
             nombre_producto: nombreProductoEditado,
@@ -37,7 +39,10 @@ export default function EditarProducto({ producto, onClose }) {
         try {
             const response = await editarProducto(datosActualizados);
             console.log('Producto editado:', response);
+            Swal.close()
+            showAlert("Producto editado")
         } catch (error) {
+            showError("Error al editar el producto")
             console.error('Error al editar el producto:', error.message);
         }
     }
@@ -104,8 +109,6 @@ export default function EditarProducto({ producto, onClose }) {
                         </div>
 
                     </div>
-
-
                 </div>
             </div>
         </div>
