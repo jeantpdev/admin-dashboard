@@ -1,6 +1,4 @@
 import axios from 'axios';
-//https://mongodb-productos.onrsender.com/
-//http://127.0.0.1:590s0/
 const getAccessToken = () => {
     return localStorage.getItem('access_token');
 };
